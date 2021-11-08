@@ -63,6 +63,17 @@ function initializeServiceWorker() {
    *  TODO - Part 2 Step 1
    *  Initialize the service worker set up in sw.js
    */
+  if('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+        // Registration Success!
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function(err) {
+        // Registration Failed...
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
 }
 
 /**
@@ -215,4 +226,10 @@ function bindPopstate() {
    * so your navigate() function does not add your going back action to the history,
    * creating an infinite loop
    */
+  window.addEventListener('popstate', function(event) {
+    if(event.state != null)
+      router.navigate(event.state.page, true);
+    else
+      router.navigate('home', true);
+  })
 }
